@@ -42,7 +42,7 @@ See `examples` folders for usage of this module.
 | recovery\_service\_protected\_source\_vm\_ids | The IDs of the VMs to backup. Changing this forces a new resource to be created. | `list(string)` | <pre>[<br>  ""<br>]</pre> | no |
 | recovery\_service\_protection\_policy\_vm\_names | The names of the Recovery Service Vault Policy. Changing this force a new resource to be created. | `list(string)` | <pre>[<br>  ""<br>]</pre> | no |
 | recovery\_service\_replication\_policy\_names | The list of names of the recovery service replication policy. | `list(string)` | <pre>[<br>  ""<br>]</pre> | no |
-| recovery\_service\_vault\_locations | The supported Azure locations where the resource exists. Changing this force a new resource to be created. | `list` | <pre>[<br>  ""<br>]</pre> | no |
+| recovery\_service\_vault\_locations | The supported Azure locations where the resource exists. Changing this force a new resource to be created. | `list(string)` | <pre>[<br>  ""<br>]</pre> | no |
 | recovery\_service\_vault\_names | The names of the recovery service vaults.Changing  this forces a new resource to be created. | `list(string)` | <pre>[<br>  ""<br>]</pre> | no |
 | recovery\_service\_vault\_skus | SKUs of the service vault which will be created. Posssible values are `Standard`, `RS0`. | `list` | <pre>[<br>  "Standard"<br>]</pre> | no |
 | recovery\_service\_vault\_soft\_delete\_enabled | Boolean flag which descibes soft delete for the vault is enabled or not. Default vaule is `true`. | `bool` | `true` | no |

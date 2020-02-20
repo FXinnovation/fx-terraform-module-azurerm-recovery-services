@@ -29,6 +29,7 @@ variable "recovery_service_vault_names" {
 
 variable "recovery_service_vault_locations" {
   description = "The supported Azure locations where the resource exists. Changing this force a new resource to be created."
+  type        = list(string)
   default     = [""]
 }
 
