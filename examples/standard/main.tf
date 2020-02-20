@@ -4,7 +4,7 @@ provider "azurerm" {
 }
 
 module "azure-recovery-services" {
-  source = "../../"
+  source = "../.."
 
   resource_group_name = ""
   recovery_vault_name = "test"
