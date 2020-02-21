@@ -43,31 +43,41 @@ variable "recovery_service_vault_soft_delete_enabled" {
   default     = true
 }
 
+variable "recovery_service_vault_tags" {
+  description = "Tags whcih will be associated to the recovery service vault."
+  default     = {}
+}
+
 ###
 # Recovery network mapping
 ###
+
+variable "network_mapping_enabled" {
+  description = "Boolean flag which specifies whether or not enable the network mapping."
+  default     = false
+}
 
 variable "recovery_network_mapping_names" {
   description = "The names of the recovery network mappings."
   default     = [""]
 }
 
-variable "source_recover_fabric_names" {
+variable "network_mapping_source_recovery_fabric_names" {
   description = "Specifies the names of ASR fabric where mapping should be created."
   default     = [""]
 }
 
-variable "target_recovery_fabric_names" {
+variable "network_mapping_target_recovery_fabric_names" {
   description = "Specifies the names of the Azure site recovery fabric object corresponding to the recovery Azure region."
   default     = [""]
 }
 
-variable "source_network_ids" {
+variable "network_mapping_source_network_ids" {
   description = "The IDs of the primary networks."
   default     = [""]
 }
 
-variable "target_network_ids" {
+variable "network_mapping_target_network_ids" {
   description = "the IDs of the recovery networks."
   default     = [""]
 }
@@ -75,6 +85,11 @@ variable "target_network_ids" {
 ###
 # Recovery service protection policy VM
 ###
+
+variable "vm_protection_policy_enabled" {
+  description = "Boolean flag which decribes whether or not to enable the VMs protection policy."
+  default     = false
+}
 
 variable "recovery_service_protection_policy_vm_names" {
   description = "The names of the Recovery Service Vault Policy. Changing this force a new resource to be created."
@@ -115,11 +130,6 @@ variable "backup_retention_weekly_count" {
   description = "A list of which specifies the of weekly backups to keep. Must be between 1 and 9999."
   type        = list(number)
   default     = [1]
-}
-
-variable "source_vm_ids" {
-  description = "Specifies the IDs of the VMs to backup. Changing these forces new resources to be created."
-  type        = list
 }
 
 variable "backup_rentntion_weekdays" {
@@ -170,9 +180,19 @@ variable "backup_retention_yearly_months" {
   default     = [null]
 }
 
+variable "recovery_service_protection_policy_vm_tags" {
+  description = "Tags which will asssociated to the service protection policy VMs."
+  default     = {}
+}
+
 ###
 # Recovery service protected VM
 ###
+
+variable "service_protected_vm_enabled" {
+  description = "Boolean whcis specifies to enable or not for the recovery service protected VMs."
+  default     = false
+}
 
 variable "recovery_service_protected_source_vm_ids" {
   description = "The IDs of the VMs to backup. Changing this forces a new resource to be created."
@@ -185,19 +205,24 @@ variable "recovery_service_protected_source_vm_ids" {
 # Recovery service replication policy
 ###
 
-variable "recovery_service_replication_policy_names" {
+variable "policy_replication_enabled" {
+  description = "Boolean flag which describes whether or not enable replication policy."
+  default     = false
+}
+
+variable "replication_policy_names" {
   description = "The list of names of the recovery service replication policy."
   type        = list(string)
   default     = [""]
 }
 
-variable "recovery_point_retention_in_minnutes" {
+variable "replication_policy_recovery_point_retention_in_minnutes" {
   description = "Retains the recovery points for the given time in minutes."
   type        = list(number)
   default     = [0]
 }
 
-variable "application_consistent_snapshot_frequency_in_minutes" {
+variable "replication_policy_application_consistent_snapshot_frequency_in_minutes" {
   description = "A list which specifies the frequency(in minutes) at which to create application consistent recovery points."
   type        = list(number)
   default     = [0]
@@ -207,73 +232,84 @@ variable "application_consistent_snapshot_frequency_in_minutes" {
 # Recovery service replicated VM
 ###
 
-variable "recovery_replicated_vm_names" {
+variable "vm_replication_enabled" {
+  description = "Boolean flag which describes whether or not to enable the recovery service for replication of VMs."
+  default     = false
+}
+
+variable "replicated_vm_names" {
   description = "List of names of the VMs which will be replicated."
   type        = list(string)
   default     = [""]
 }
 
-variable "recovery_replicated_source_vm_ids" {
+variable "replicated_vm_source_recovery_fabric_names" {
+  description = "The names of the service fabric taht should conatins this replication."
+  type        = list(string)
+  default     = [""]
+}
+
+variable "replicated_vm_source_vm_ids" {
   description = "The IDs of the VMs to replicate."
   type        = list(string)
   default     = [""]
 }
 
-variable "source_recovery_protection_container_names" {
+variable "replicated_vm_source_recovery_protection_container_names" {
   description = "List which specifies the names of the protection containers to use."
   type        = list(string)
   default     = [""]
 }
 
-variable "target_resource_group_ids" {
+variable "replicated_vm_target_resource_group_ids" {
   description = "The IDs of the resource group where the VMs should be created when a failover is done."
   type        = list(string)
   default     = [""]
 }
 
-variable "target_recovery_fabric_ids" {
+variable "replicated_vm_target_recovery_fabric_ids" {
   description = "The IDs of the service fabric where the VMs replication should be handled when a failover is done."
   type        = list(string)
   default     = [""]
 }
 
-variable "target_recovery_protection_container_ids" {
+variable "replicated_vm_target_recovery_protection_container_ids" {
   description = "IDs of the protection containers where the VM replication should be created when a failover is done."
   type        = list(string)
   default     = [""]
 }
 
-variable "target_availability_set_ids" {
+variable "replicated_vm_target_availability_set_ids" {
   description = "IDs of the availability set that the new VMs should belong to when a failover is done."
   type        = list(string)
   default     = [""]
 }
 
-variable "managed_disk_id" {
+variable "managed_disk_ids" {
   description = "The IDs of the managed disk that should be replicated."
   type        = list(string)
   default     = [""]
 }
 
-variable "managed_disk_staging_storage_account_id" {
+variable "managed_disk_staging_storage_account_ids" {
   description = "The IDs of the storage account that should be used for caching."
   type        = list(string)
   default     = [""]
 }
 
-variable "managed_disk_target_resource_group_id" {
+variable "managed_disk_target_resource_group_ids" {
   description = "The IDs of the resource group whih the disk belong to when a failover is done."
   type        = list(string)
   default     = [""]
 }
 
-variable "managed_disk_target_disk_type" {
+variable "managed_disk_target_disk_types" {
   description = "List which specifies what type should the disk be when a failover is done."
   type        = list(string)
   default     = [""]
 }
 
-variable "managed_disk_target_replica_disk_type" {
+variable "managed_disk_target_replica_disk_types" {
   description = "List whicg describes what type should the disk be that holds the replication data."
   type        = list(string)
   default     = [""]

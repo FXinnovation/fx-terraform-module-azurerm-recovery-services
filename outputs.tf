@@ -2,9 +2,9 @@
 # Recovery service vault
 ###
 
-output "recovery_vault_id" {
+output "recovery_vault_ids" {
   description = "The IDs of the recovery service vault."
-  value       = azurerm_recovery_services_vault.this.*.id
+  value       = azurerm_recovery_services_vault.this.*.ids
 }
 
 ###
