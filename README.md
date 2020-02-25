@@ -14,7 +14,21 @@ See `examples` folders for usage of this module.
 
 | Name | Description | Type | Default | Required |
 |------|-------------|------|---------|:-----:|
+| backup\_container\_storage\_account\_ids | The list of Azure resource IDs of the storage account to be registered. | `list(string)` | <pre>[<br>  ""<br>]</pre> | no |
 | backup\_frequency | If specified , it defines  the frequency of backups. Must be either `Daily` or `Weekly`. | `list(string)` | <pre>[<br>  ""<br>]</pre> | no |
+| backup\_policy\_file\_share\_count | The list of times of the day to perform the backup in 24-hour format. Times must be either on the hour or half hour(eg: `12:00`, `12:30`, `13:00`,etc). | `list(string)` | <pre>[<br>  ""<br>]</pre> | no |
+| backup\_policy\_file\_share\_daily\_retention\_count | The list of number of the daily backup to keep. Must be between `1` and `180`. | `list(number)` | <pre>[<br>  1<br>]</pre> | no |
+| backup\_policy\_file\_share\_enabled | Boolean flag which describes whether or nor to enable the backup for file share policy. | `bool` | `false` | no |
+| backup\_policy\_file\_share\_frequency | The frequency of the file share backup. Currently, only `Daily` is supported. | `string` | `""` | no |
+| backup\_policy\_file\_share\_names | A list which specifies the names of the policy. Changing this forces a new resource to be created. | `list(string)` | <pre>[<br>  ""<br>]</pre> | no |
+| backup\_policy\_file\_share\_timezones | The list of the timezones. Default to `UTC`. | `list(string)` | <pre>[<br>  ""<br>]</pre> | no |
+| backup\_policy\_vm\_tags | Tags which will asssociated to the backup VM policies. | `map` | `{}` | no |
+| backup\_protected\_file\_share\_enabled | Boolean flag which describes whether or not enable the backup for the protected file share. | `bool` | `false` | no |
+| backup\_protected\_file\_share\_source\_file\_share\_names | Spcifies the names of the file share to backup. Changing this forces a new resource to be created. | `list(string)` | <pre>[<br>  ""<br>]</pre> | no |
+| backup\_protected\_file\_share\_source\_storage\_account\_ids | The list of IDs of the stoarge account of the fileshare to backup. Changing this forces a new resource to be created. | `list(string)` | <pre>[<br>  ""<br>]</pre> | no |
+| backup\_protected\_source\_vm\_ids | The IDs of the VMs to backup. Changing this forces a new resource to be created. | `list(string)` | <pre>[<br>  ""<br>]</pre> | no |
+| backup\_protected\_vm\_enabled | Boolean whcih specifies to enable or not for the backup protected VMs. | `bool` | `false` | no |
+| backup\_protected\_vm\_tags | Tags whcih will be associated to the backup protected VMs. | `map` | `{}` | no |
 | backup\_rentntion\_weekdays | List of days of the week to perform backups on. Must be one of `Sunday`, `Monday`, `Tuesday`, `Wednesday`, `Thursday`, `Friday` or `Saturday`. | `list(list(string))` | <pre>[<br>  null<br>]</pre> | no |
 | backup\_retention\_daily\_count | A list of which specifies the number of daily backups to keep. Must be between 1 and 9999. | `list(number)` | <pre>[<br>  1<br>]</pre> | no |
 | backup\_retention\_monthly\_count | A list which specifies the number of monthly backups to keep. Must be between 1 and 9999. | `list(number)` | <pre>[<br>  1<br>]</pre> | no |
@@ -25,56 +39,31 @@ See `examples` folders for usage of this module.
 | backup\_retention\_yearly\_months | The months of the year to retain backups of. Must be one of `January`, `February`, `March`, `April`, `May`, `June`, `July`, `Augest`, `September`, `October`, `November` and `December`. | `list(list(string))` | <pre>[<br>  null<br>]</pre> | no |
 | backup\_retention\_yearly\_weekdays | List of weekdays backups to retain . Must be one of `Sunday`, `Monday`, `Tuesday`, `Wednesday`, `Thursday`, `Friday` or `Saturday`. | `list(list(string))` | <pre>[<br>  null<br>]</pre> | no |
 | backup\_retention\_yearly\_weeks | The list of weeks of the month to retain backups of. Must be one of `First`, `Second`, `Third`, `Fourth`, `Last`. | `list(string)` | <pre>[<br>  ""<br>]</pre> | no |
+| backup\_storage\_container\_enabled | Boolean flag which describes whether or not to enable Backup for storage account containers. | `bool` | `false` | no |
 | backup\_time | The list times of day to perform the backup in 24hour format. | `list(string)` | <pre>[<br>  ""<br>]</pre> | no |
 | backup\_timezone | List which specifies the timezones. Defaults to `UTC`. | `list(string)` | <pre>[<br>  "UTC"<br>]</pre> | no |
+| backup\_vm\_policy\_enabled | Boolean flag which decribes whether or not to enable the backup policy for VMs. | `bool` | `false` | no |
+| backup\_vm\_policy\_id\_names | The list of names the backup policy IDs which should be used to backup the protected VMs. | `list(string)` | <pre>[<br>  ""<br>]</pre> | no |
+| backup\_vm\_policy\_names | The names of the backup VM policies. Changing this force a new resource to be created. | `list(string)` | <pre>[<br>  ""<br>]</pre> | no |
 | backup\_weekdays | List of days of the week to perform backups on. Must be one of `Sunday`, `Monday`, `Tuesday`, `Wednesday`, `Thursday`, `Friday` or `Saturday`. | `list(list(string))` | <pre>[<br>  null<br>]</pre> | no |
 | enabled | Enable or disable module. | `bool` | `true` | no |
-| managed\_disk\_ids | The IDs of the managed disk that should be replicated. | `list(string)` | <pre>[<br>  ""<br>]</pre> | no |
-| managed\_disk\_staging\_storage\_account\_ids | The IDs of the storage account that should be used for caching. | `list(string)` | <pre>[<br>  ""<br>]</pre> | no |
-| managed\_disk\_target\_disk\_types | List which specifies what type should the disk be when a failover is done. | `list(string)` | <pre>[<br>  ""<br>]</pre> | no |
-| managed\_disk\_target\_replica\_disk\_types | List whicg describes what type should the disk be that holds the replication data. | `list(string)` | <pre>[<br>  ""<br>]</pre> | no |
-| managed\_disk\_target\_resource\_group\_ids | The IDs of the resource group whih the disk belong to when a failover is done. | `list(string)` | <pre>[<br>  ""<br>]</pre> | no |
-| network\_mapping\_enabled | Boolean flag which specifies whether or not enable the network mapping. | `bool` | `false` | no |
-| network\_mapping\_source\_network\_ids | The IDs of the primary networks. | `list` | <pre>[<br>  ""<br>]</pre> | no |
-| network\_mapping\_source\_recovery\_fabric\_names | Specifies the names of ASR fabric where mapping should be created. | `list` | <pre>[<br>  ""<br>]</pre> | no |
-| network\_mapping\_target\_network\_ids | the IDs of the recovery networks. | `list` | <pre>[<br>  ""<br>]</pre> | no |
-| network\_mapping\_target\_recovery\_fabric\_names | Specifies the names of the Azure site recovery fabric object corresponding to the recovery Azure region. | `list` | <pre>[<br>  ""<br>]</pre> | no |
-| policy\_replication\_enabled | Boolean flag which describes whether or not enable replication policy. | `bool` | `false` | no |
-| recovery\_network\_mapping\_names | The names of the recovery network mappings. | `list` | <pre>[<br>  ""<br>]</pre> | no |
-| recovery\_service\_protected\_source\_vm\_ids | The IDs of the VMs to backup. Changing this forces a new resource to be created. | `list(string)` | <pre>[<br>  ""<br>]</pre> | no |
-| recovery\_service\_protection\_policy\_vm\_names | The names of the Recovery Service Vault Policy. Changing this force a new resource to be created. | `list(string)` | <pre>[<br>  ""<br>]</pre> | no |
-| recovery\_service\_protection\_policy\_vm\_tags | Tags which will asssociated to the service protection policy VMs. | `map` | `{}` | no |
-| recovery\_service\_vault\_locations | The supported Azure locations where the resource exists. Changing this force a new resource to be created. | `list(string)` | <pre>[<br>  ""<br>]</pre> | no |
-| recovery\_service\_vault\_names | The names of the recovery service vaults.Changing  this forces a new resource to be created. | `list(string)` | <pre>[<br>  ""<br>]</pre> | no |
-| recovery\_service\_vault\_skus | SKUs of the service vault which will be created. Posssible values are `Standard`, `RS0`. | `list` | <pre>[<br>  "Standard"<br>]</pre> | no |
+| recovery\_service\_vault\_location | The supported Azure locations where the resource exists. Changing this force a new resource to be created. | `string` | `""` | no |
+| recovery\_service\_vault\_name | The name of the recovery service vaults.Changing  this forces a new resource to be created. | `string` | `""` | no |
+| recovery\_service\_vault\_sku | SKU of the service vault which will be created. Posssible values are `Standard`, `RS0`. | `string` | `"Standard"` | no |
 | recovery\_service\_vault\_soft\_delete\_enabled | Boolean flag which descibes soft delete for the vault is enabled or not. Default vaule is `true`. | `bool` | `true` | no |
 | recovery\_service\_vault\_tags | Tags whcih will be associated to the recovery service vault. | `map` | `{}` | no |
-| replicated\_vm\_names | List of names of the VMs which will be replicated. | `list(string)` | <pre>[<br>  ""<br>]</pre> | no |
-| replicated\_vm\_source\_recovery\_fabric\_names | The names of the service fabric taht should conatins this replication. | `list(string)` | <pre>[<br>  ""<br>]</pre> | no |
-| replicated\_vm\_source\_recovery\_protection\_container\_names | List which specifies the names of the protection containers to use. | `list(string)` | <pre>[<br>  ""<br>]</pre> | no |
-| replicated\_vm\_source\_vm\_ids | The IDs of the VMs to replicate. | `list(string)` | <pre>[<br>  ""<br>]</pre> | no |
-| replicated\_vm\_target\_availability\_set\_ids | IDs of the availability set that the new VMs should belong to when a failover is done. | `list(string)` | <pre>[<br>  ""<br>]</pre> | no |
-| replicated\_vm\_target\_recovery\_fabric\_ids | The IDs of the service fabric where the VMs replication should be handled when a failover is done. | `list(string)` | <pre>[<br>  ""<br>]</pre> | no |
-| replicated\_vm\_target\_recovery\_protection\_container\_ids | IDs of the protection containers where the VM replication should be created when a failover is done. | `list(string)` | <pre>[<br>  ""<br>]</pre> | no |
-| replicated\_vm\_target\_resource\_group\_ids | The IDs of the resource group where the VMs should be created when a failover is done. | `list(string)` | <pre>[<br>  ""<br>]</pre> | no |
-| replication\_policy\_application\_consistent\_snapshot\_frequency\_in\_minutes | A list which specifies the frequency(in minutes) at which to create application consistent recovery points. | `list(number)` | <pre>[<br>  0<br>]</pre> | no |
-| replication\_policy\_names | The list of names of the recovery service replication policy. | `list(string)` | <pre>[<br>  ""<br>]</pre> | no |
-| replication\_policy\_recovery\_point\_retention\_in\_minnutes | Retains the recovery points for the given time in minutes. | `list(number)` | <pre>[<br>  0<br>]</pre> | no |
 | resource\_group\_name | Name of the resource group of the recovery services resources should be exist.Changing this forces a new resource to be created. | `string` | `""` | no |
-| service\_protected\_vm\_enabled | Boolean whcis specifies to enable or not for the recovery service protected VMs. | `bool` | `false` | no |
 | tags | Tags shared by all resources of this module. Will be merged with any other specific tags by resource. | `map` | `{}` | no |
-| vm\_protection\_policy\_enabled | Boolean flag which decribes whether or not to enable the VMs protection policy. | `bool` | `false` | no |
-| vm\_replication\_enabled | Boolean flag which describes whether or not to enable the recovery service for replication of VMs. | `bool` | `false` | no |
 
 ## Outputs
 
 | Name | Description |
 |------|-------------|
-| recovery\_network\_mapping\_ids | The IDs of the site recovery network mappings. |
-| recovery\_service\_protected\_vm\_ids | The IDs of the recovery service protected VMs. |
-| recovery\_vault\_ids | The IDs of the recovery service vault. |
-| replicated\_vm\_ids | The IDs of the recovery service replicated VMs |
-| replication\_policy\_ids | The IDs of the recovery service replication policy. |
-| service\_protection\_vm\_policy\_ids | The IDs of the recovery service VM protection policy. |
+| backup\_file\_share\_policy\_ids | The IDs of the backup file share policies. |
+| backup\_protected\_file\_share\_ids | The IDs of the backup protected file shares. |
+| backup\_protected\_vm\_ids | The IDs of the backup protected VMs. |
+| backup\_storage\_account\_conatiner\_ids | The IDs of the backup storage account container. |
+| backup\_vm\_policy\_ids | The IDs of the backup VM policies. |
+| recovery\_vault\_ids | The ID of the recovery service vault. |
 
 <!-- END OF PRE-COMMIT-TERRAFORM DOCS HOOK -->

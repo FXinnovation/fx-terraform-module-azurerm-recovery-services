@@ -1,9 +1,10 @@
 locals {
-  should_create_recovery_network_mapping               = var.enabled && var.network_mapping_enabled
-  should_create_recovery_service_protection_policy_vms = var.enabled && var.vm_protection_policy_enabled
-  should_create_recovery_service_protected_vms         = var.enabled && var.service_protected_vm_enabled
-  should_create_replication_policy                     = var.enabled && var.policy_replication_enabled
-  should_create_replicated_vms                         = var.enabled && var.vm_replication_enabled
+  should_create_backup_container            = var.enabled && var.backup_storage_container_enabled
+  should_create_backup_vm_policy            = var.enabled && var.backup_vm_policy_enabled
+  should_create_backup_protected_vm         = var.enabled && var.backup_protected_vm_enabled
+  should_create_backup_policy_file_share    = var.enabled && var.backup_policy_file_share_enabled
+  should_create_backup_protected_file_share = var.enabled && var.backup_protected_file_share_enabled
+  backup_policy_ids                         = zipmap(var.backup_vm_policy_names, compact(concat(azurerm_backup_policy_vm.this.*.id, [""])))
 }
 
 
@@ -14,11 +15,11 @@ locals {
 resource "azurerm_recovery_services_vault" "this" {
   count = var.enabled ? 1 : 0
 
-  name                = element(var.recovery_service_vault_names, count.index)
-  location            = element(var.recovery_service_vault_locations, count.index)
+  name                = var.recovery_service_vault_name
+  sku                 = var.recovery_service_vault_sku
+  location            = var.recovery_service_vault_location
   resource_group_name = var.resource_group_name
-  sku                 = element(var.recovery_service_vault_skus, count.index)
-  soft_delete_enabled = element(var.recovery_service_vault_soft_delete_enabled, count.index)
+  soft_delete_enabled = var.recovery_service_vault_soft_delete_enabled
 
   tags = merge(
     var.tags,
@@ -30,31 +31,28 @@ resource "azurerm_recovery_services_vault" "this" {
 }
 
 ###
-# Recovery network mapping
+# Backup container storage account
 ###
 
-resource "azurerm_recovery_network_mapping" "this" {
-  count = local.should_create_recovery_network_mapping ? 1 : 0
+resource "azurerm_backup_container_storage_account" "this_container" {
+  count = local.should_create_backup_container ? length(var.backup_container_storage_account_ids) : 0
 
-  name                        = var.recovery_network_mapping_names
-  resource_group_name         = var.resource_group_name
-  recovery_vault_name         = element(azurerm_recovery_services_vault.this.*.id, count.index)
-  source_recovery_fabric_name = var.network_mapping_source_recovery_fabric_names
-  target_recovery_fabric_name = var.network_mapping_target_recovery_fabric_names
-  source_network_id           = var.network_mapping_source_network_ids
-  target_network_id           = var.network_mapping_target_network_ids
+  resource_group_name = var.resource_group_name
+  recovery_vault_name = var.recovery_service_vault_name
+  storage_account_id  = element(var.backup_container_storage_account_ids, count.index)
+
 }
 
 ###
-# Recovery service protection policy VM
+# Backup policy VM
 ###
 
-resource "azurerm_recovery_services_protection_policy_vm" "this" {
-  count = local.should_create_recovery_service_protection_policy_vms ? 1 : 0
+resource "azurerm_backup_policy_vm" "this" {
+  count = local.should_create_backup_vm_policy ? 1 : 0
 
-  name                = var.recovery_service_protection_policy_vm_names[count.index]
+  name                = var.backup_vm_policy_names[count.index]
   resource_group_name = var.resource_group_name
-  recovery_vault_name = element(azurerm_recovery_services_vault.this.*.id, count.index)
+  recovery_vault_name = var.recovery_service_vault_name
 
   timezone = var.backup_timezone[count.index]
 
@@ -108,7 +106,7 @@ resource "azurerm_recovery_services_protection_policy_vm" "this" {
 
   tags = merge(
     var.tags,
-    var.recovery_service_protection_policy_vm_tags,
+    var.backup_policy_vm_tags,
     {
       "Terraform" = "true"
     }
@@ -116,60 +114,67 @@ resource "azurerm_recovery_services_protection_policy_vm" "this" {
 }
 
 ###
-# Recovery service protected VM
+# Backup protected VM
 ###
 
-resource "azurerm_recovery_services_protected_vm" "this_vm" {
-  count = local.should_create_recovery_service_protected_vms ? length(var.recovery_service_protected_source_vm_ids) : 0
+resource "azurerm_backup_protected_vm" "this_vm" {
+  count = local.should_create_backup_protected_vm ? length(var.backup_protected_source_vm_ids) : 0
 
   resource_group_name = var.resource_group_name
-  recovery_vault_name = element(azurerm_recovery_services_vault.this.*.id, count.index)
-  source_vm_id        = var.recovery_service_protected_source_vm_ids[count.index]
-  backup_policy_id    = element(azurerm_recovery_services_protection_policy_vm.this.*.id, count.index)
+  recovery_vault_name = var.recovery_service_vault_name
+  source_vm_id        = element(var.backup_protected_source_vm_ids, count.index)
+  backup_policy_id    = var.backup_vm_policy_enabled ? lookup(local.backup_policy_ids, element(var.backup_vm_policy_id_names, count.index), null) : ""
+
+  tags = merge(
+    var.tags,
+    var.backup_protected_vm_tags,
+    {
+      "Terraform" = "true"
+    }
+  )
 }
 
 ###
-# Recovery service replication policy
+# Backup policy file share
 ###
 
-resource "azurerm_recovery_services_replication_policy" "this_policy" {
-  count = local.should_create_replication_policy ? 1 : 0
+resource "azurerm_backup_policy_file_share" "this" {
+  count = local.should_create_backup_policy_file_share ? 1 : 0
 
-  name                                                 = element(var.replication_policy_names, count.index)
-  resource_group_name                                  = var.resource_group_name
-  recovery_vault_name                                  = element(azurerm_recovery_services_vault.this.*.id, count.index)
-  recovery_point_retention_in_minutes                  = element(var.replication_policy_recovery_point_retention_in_minnutes, count.index)
-  application_consistent_snapshot_frequency_in_minutes = element(var.replication_policy_application_consistent_snapshot_frequency_in_minutes, count.index)
-}
+  name                = element(var.backup_policy_file_share_names, count.index)
+  resource_group_name = var.resource_group_name
+  recovery_vault_name = var.recovery_service_vault_name
+  timezone            = element(var.backup_policy_file_share_timezones, count.index)
 
-###
-# Recovery service replicated VM
-###
-
-resource "azurerm_recovery_replicated_vm" "this_vm" {
-  count = local.should_create_replicated_vms ? 1 : 0
-
-  name                                      = var.replicated_vm_names[count.index]
-  resource_group_name                       = var.resource_group_name
-  recovery_vault_name                       = element(azurerm_recovery_services_vault.this.*.id, count.index)
-  recovery_replication_policy_id            = element(azurerm_recovery_services_replication_policy.this_policy.*.id, count.index)
-  source_recovery_fabric_name               = var.replicated_vm_source_recovery_fabric_names[count.index]
-  source_vm_id                              = var.replicated_vm_source_vm_ids[count.index]
-  source_recovery_protection_container_name = var.replicated_vm_source_recovery_protection_container_names[count.index]
-  target_resource_group_id                  = var.replicated_vm_target_resource_group_ids[count.index]
-  target_recovery_fabric_id                 = var.replicated_vm_target_recovery_fabric_ids[count.index]
-  target_recovery_protection_container_id   = var.replicated_vm_target_recovery_protection_container_ids[count.index]
-  target_availability_set_id                = var.replicated_vm_target_availability_set_ids[count.index]
-
-  dynamic "managed_disk" {
-    for_each = var.managed_disk_ids[count.index] != "" ? [1] : []
+  dynamic "backup" {
+    for_each = var.backup_policy_file_share_frequency != "" ? [1] : []
 
     content {
-      disk_id                    = var.managed_disk_ids
-      staging_storage_account_id = var.managed_disk_staging_storage_account_ids
-      target_resource_group_id   = var.managed_disk_target_resource_group_ids
-      target_disk_type           = var.managed_disk_target_disk_types
-      target_replica_disk_type   = var.managed_disk_target_replica_disk_types
+      frequency = var.backup_policy_file_share_frequency
+      time      = var.backup_policy_file_share_time
     }
   }
+
+  dynamic "retention_daily" {
+    for_each = var.backup_policy_file_share_frequency == "Daily" ? [1] : []
+
+    content {
+      count = var.backup_policy_file_share_daily_retention_count
+    }
+  }
+
+}
+
+###
+# Backup protected file share
+###
+
+resource "azurerm_backup_protected_file_share" "this" {
+  count = local.should_create_backup_protected_file_share ? 1 : 0
+
+  resource_group_name       = var.resource_group_name
+  recovery_vault_name       = var.recovery_service_vault_name
+  source_storage_account_id = element(var.backup_protected_file_share_source_storage_account_ids, count.index)
+  source_file_share_name    = element(var.backup_protected_file_share_source_file_share_names, count.index)
+  backup_policy_id          = element(azurerm_backup_policy_file_share.this.*.id, count.index)
 }
