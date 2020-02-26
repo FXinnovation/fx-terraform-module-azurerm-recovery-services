@@ -8,7 +8,7 @@ See `examples` folders for usage of this module.
 
 | Name | Version |
 |------|---------|
-| azurerm | ~>1.44.0 |
+| azurerm | >=1.44.0 |
 
 ## Inputs
 
