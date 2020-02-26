@@ -138,8 +138,8 @@ variable "backup_retention_monthly_weekdays" {
 
 variable "backup_retention_monthly_weeks" {
   description = "The list of weeks of the month to retain backups of. Must be one of `First`, `Second`, `Third`, `Fourth`, `Last`."
-  type        = list(string)
-  default     = [""]
+  type        = list(list(string))
+  default     = [null]
 }
 
 variable "backup_retention_yearly_count" {
@@ -156,8 +156,8 @@ variable "backup_retention_yearly_weekdays" {
 
 variable "backup_retention_yearly_weeks" {
   description = "The list of weeks of the month to retain backups of. Must be one of `First`, `Second`, `Third`, `Fourth`, `Last`."
-  type        = list(string)
-  default     = [""]
+  type        = list(list(string))
+  default     = [null]
 }
 
 variable "backup_retention_yearly_months" {

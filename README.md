@@ -34,12 +34,12 @@ See `examples` folders for usage of this module.
 | backup\_retention\_daily\_count | A list of which specifies the number of daily backups to keep. Must be between 1 and 9999. | `list(number)` | <pre>[<br>  1<br>]</pre> | no |
 | backup\_retention\_monthly\_count | A list which specifies the number of monthly backups to keep. Must be between 1 and 9999. | `list(number)` | <pre>[<br>  0<br>]</pre> | no |
 | backup\_retention\_monthly\_weekdays | The list weekday backups to retain . Must be one of `Sunday`, `Monday`, `Tuesday`, `Wednesday`, `Thursday`, `Friday` or `Saturday`. | `list(list(string))` | <pre>[<br>  null<br>]</pre> | no |
-| backup\_retention\_monthly\_weeks | The list of weeks of the month to retain backups of. Must be one of `First`, `Second`, `Third`, `Fourth`, `Last`. | `list(string)` | <pre>[<br>  ""<br>]</pre> | no |
+| backup\_retention\_monthly\_weeks | The list of weeks of the month to retain backups of. Must be one of `First`, `Second`, `Third`, `Fourth`, `Last`. | `list(list(string))` | <pre>[<br>  null<br>]</pre> | no |
 | backup\_retention\_weekly\_count | A list of which specifies the of weekly backups to keep. Must be between 1 and 9999. | `list(number)` | <pre>[<br>  0<br>]</pre> | no |
 | backup\_retention\_yearly\_count | A list which specifies the number of yearly backups to keep. Must be between 1 and 9999. | `list(number)` | <pre>[<br>  0<br>]</pre> | no |
 | backup\_retention\_yearly\_months | The months of the year to retain backups of. Must be one of `January`, `February`, `March`, `April`, `May`, `June`, `July`, `Augest`, `September`, `October`, `November` and `December`. | `list(list(string))` | <pre>[<br>  null<br>]</pre> | no |
 | backup\_retention\_yearly\_weekdays | List of weekdays backups to retain . Must be one of `Sunday`, `Monday`, `Tuesday`, `Wednesday`, `Thursday`, `Friday` or `Saturday`. | `list(list(string))` | <pre>[<br>  null<br>]</pre> | no |
-| backup\_retention\_yearly\_weeks | The list of weeks of the month to retain backups of. Must be one of `First`, `Second`, `Third`, `Fourth`, `Last`. | `list(string)` | <pre>[<br>  ""<br>]</pre> | no |
+| backup\_retention\_yearly\_weeks | The list of weeks of the month to retain backups of. Must be one of `First`, `Second`, `Third`, `Fourth`, `Last`. | `list(list(string))` | <pre>[<br>  null<br>]</pre> | no |
 | backup\_storage\_container\_enabled | Boolean flag which describes whether or not to enable Backup for storage account containers. | `bool` | `false` | no |
 | backup\_time | The list times of day to perform the backup in 24hour format. | `list(string)` | <pre>[<br>  ""<br>]</pre> | no |
 | backup\_timezone | List which specifies the timezones. Defaults to `UTC`. | `list(string)` | <pre>[<br>  "UTC"<br>]</pre> | no |

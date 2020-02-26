@@ -59,9 +59,9 @@ resource "azurerm_backup_policy_vm" "this" {
     for_each = var.backup_frequency[count.index] != "" ? [1] : []
 
     content {
-      frequency = var.backup_frequency
-      time      = var.backup_time
-      weekdays  = var.backup_frequency == "Weekly" ? var.backup_weekdays : []
+      frequency = element(var.backup_frequency, count.index)
+      time      = element(var.backup_time, count.index)
+      weekdays  = element(var.backup_frequency, count.index) == "Weekly" ? element(var.backup_weekdays, count.index) : ""
     }
   }
 
@@ -69,16 +69,16 @@ resource "azurerm_backup_policy_vm" "this" {
     for_each = var.backup_frequency[count.index] == "Daily" ? [1] : []
 
     content {
-      count = var.backup_retention_daily_count
+      count = element(var.backup_retention_daily_count, count.index)
     }
   }
 
   dynamic "retention_weekly" {
-    for_each = var.backup_retention_weekly_count[count.index] > 0 || var.backup_frequency == "Weekly" ? [1] : []
+    for_each = var.backup_retention_weekly_count[count.index] > 0 || element(var.backup_frequency, count.index) == "Weekly" ? [1] : []
 
     content {
-      count    = var.backup_retention_weekly_count
-      weekdays = var.backup_rentntion_weekdays
+      count    = element(var.backup_retention_weekly_count, count.index)
+      weekdays = element(var.backup_rentntion_weekdays, count.index)
     }
   }
 
@@ -86,9 +86,9 @@ resource "azurerm_backup_policy_vm" "this" {
     for_each = var.backup_retention_monthly_count[count.index] > 0 ? [1] : []
 
     content {
-      count    = var.backup_retention_monthly_count
-      weekdays = var.backup_retention_monthly_weekdays
-      weeks    = var.backup_retention_monthly_weeks
+      count    = element(var.backup_retention_monthly_count, count.index)
+      weekdays = element(var.backup_retention_monthly_weekdays, count.index)
+      weeks    = element(var.backup_retention_monthly_weeks, count.index)
     }
   }
 
@@ -96,10 +96,10 @@ resource "azurerm_backup_policy_vm" "this" {
     for_each = var.backup_retention_yearly_count[count.index] > 0 ? [1] : []
 
     content {
-      count    = var.backup_retention_yearly_count
-      weekdays = var.backup_retention_yearly_weekdays
-      weeks    = var.backup_retention_yearly_weeks
-      months   = var.backup_retention_yearly_months
+      count    = element(var.backup_retention_yearly_count, count.index)
+      weekdays = element(var.backup_retention_yearly_weekdays, count.index)
+      weeks    = element(var.backup_retention_yearly_weeks, count.index)
+      months   = element(var.backup_retention_yearly_months, count.index)
     }
   }
 
@@ -149,8 +149,8 @@ resource "azurerm_backup_policy_file_share" "this" {
     for_each = var.backup_policy_file_share_frequencies[count.index] != "" ? [1] : []
 
     content {
-      frequency = var.backup_policy_file_share_frequencies
-      time      = var.backup_policy_file_share_times
+      frequency = element(var.backup_policy_file_share_frequencies, count.index)
+      time      = element(var.backup_policy_file_share_times, count.index)
     }
   }
 
@@ -158,7 +158,7 @@ resource "azurerm_backup_policy_file_share" "this" {
     for_each = var.backup_policy_file_share_frequencies[count.index] == "Daily" ? [1] : []
 
     content {
-      count = var.backup_policy_file_share_daily_retention_count
+      count = element(var.backup_policy_file_share_daily_retention_count, count.index)
     }
   }
 

@@ -4,9 +4,8 @@
 
 output "recovery_vault_id" {
   description = "The ID of the recovery service vault."
-  value       = azurerm_recovery_services_vault.this.*.id
+  value       = element(concat(azurerm_recovery_services_vault.this.*.id, list("")), 0)
 }
-
 
 ###
 # Backup conatiner storage account
