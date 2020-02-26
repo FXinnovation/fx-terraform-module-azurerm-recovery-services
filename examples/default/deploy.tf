@@ -42,27 +42,20 @@ resource "azurerm_virtual_machine" "vm" {
   }
 }
 
-resource "azurerm_recovery_services_fabric" "source" {
-  name                = "source${random_string.this.result}"
-  resource_group_name = azurerm_resource_group.secondary.name
-  recovery_vault_name = azurerm_recovery_services_vault.vault.name
-  location            = azurerm_resource_group.primary.location
-}
 
 module "example" {
   source = "../.."
 
-  resource_group_name              = "tftest${random_string.this.result}"
-  recovery_service_vault_names     = ["test${random_string.this.result}"]
-  recovery_service_vault_locations = ["Canada Central"]
-  recovery_service_vault_skus      = ["Standard"]
+  resource_group_name             = "tftest${random_string.this.result}"
+  recovery_service_vault_name     = "test${random_string.this.result}"
+  recovery_service_vault_location = "Canada Central"
+  recovery_service_vault_sku      = "Standard"
 
-  source_vm_ids = [""]
-
+  backup_vm_policy_enabled          = true
   backup_frequency                  = "Daily"
   backup_time                       = "23:00"
   backup_weekdays                   = ["Sunday"]
-  backup_timezone                   = "America/Toronto"
+  backup_timezone                   = ["America/Toronto"]
   backup_retention_daily_count      = "31"
   backup_retention_weekly_count     = "5"
   backup_retention_monthly_count    = "12"

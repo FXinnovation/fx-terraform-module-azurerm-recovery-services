@@ -9,13 +9,14 @@ variable "enabled" {
 
 variable "resource_group_name" {
   description = "Name of the resource group of the recovery services resources should be exist.Changing this forces a new resource to be created."
-  default     = ""
+  type        = string
 }
 
 variable "tags" {
   description = "Tags shared by all resources of this module. Will be merged with any other specific tags by resource."
   default     = {}
 }
+
 
 ###
 # Recovery service vault
@@ -24,18 +25,16 @@ variable "tags" {
 variable "recovery_service_vault_name" {
   description = "The name of the recovery service vaults.Changing  this forces a new resource to be created."
   type        = string
-  default     = ""
 }
 
 variable "recovery_service_vault_location" {
   description = "The supported Azure locations where the resource exists. Changing this force a new resource to be created."
   type        = string
-  default     = ""
 }
 
 variable "recovery_service_vault_sku" {
   description = "SKU of the service vault which will be created. Posssible values are `Standard`, `RS0`."
-  default     = "Standard"
+  type        = string
 }
 
 variable "recovery_service_vault_soft_delete_enabled" {
@@ -70,6 +69,12 @@ variable "backup_container_storage_account_ids" {
 variable "backup_vm_policy_enabled" {
   description = "Boolean flag which decribes whether or not to enable the backup policy for VMs."
   default     = false
+}
+
+variable "backup_vm_policy_count" {
+  description = "Specifies the number of backup policies we would like to create."
+  type        = number
+  default     = 1
 }
 
 variable "backup_vm_policy_names" {
@@ -110,7 +115,7 @@ variable "backup_retention_daily_count" {
 variable "backup_retention_weekly_count" {
   description = "A list of which specifies the of weekly backups to keep. Must be between 1 and 9999."
   type        = list(number)
-  default     = [1]
+  default     = [0]
 }
 
 variable "backup_rentntion_weekdays" {
@@ -122,7 +127,7 @@ variable "backup_rentntion_weekdays" {
 variable "backup_retention_monthly_count" {
   description = "A list which specifies the number of monthly backups to keep. Must be between 1 and 9999."
   type        = list(number)
-  default     = [1]
+  default     = [0]
 }
 
 variable "backup_retention_monthly_weekdays" {
@@ -140,7 +145,7 @@ variable "backup_retention_monthly_weeks" {
 variable "backup_retention_yearly_count" {
   description = "A list which specifies the number of yearly backups to keep. Must be between 1 and 9999."
   type        = list(number)
-  default     = [1]
+  default     = [0]
 }
 
 variable "backup_retention_yearly_weekdays" {
@@ -187,6 +192,12 @@ variable "backup_vm_policy_id_names" {
   default     = [""]
 }
 
+variable "existing_backup_policy_id" {
+  description = "List of the existing backup policy IDs which will be used to backup the VMs."
+  type        = list(string)
+  default     = [""]
+}
+
 variable "backup_protected_vm_tags" {
   description = "Tags whcih will be associated to the backup protected VMs."
   default     = {}
@@ -201,6 +212,13 @@ variable "backup_policy_file_share_enabled" {
   default     = false
 }
 
+variable "backup_policy_file_share_count" {
+  description = "Specifies the numnber of backup file share policies we would like to create."
+  type        = number
+  default     = 1
+}
+
+
 variable "backup_policy_file_share_names" {
   description = "A list which specifies the names of the policy. Changing this forces a new resource to be created."
   type        = list(string)
@@ -213,13 +231,13 @@ variable "backup_policy_file_share_timezones" {
   default     = [""]
 }
 
-variable "backup_policy_file_share_frequency" {
+variable "backup_policy_file_share_frequencies" {
   description = "The frequency of the file share backup. Currently, only `Daily` is supported."
-  type        = string
-  default     = ""
+  type        = list(string)
+  default     = [""]
 }
 
-variable "backup_policy_file_share_count" {
+variable "backup_policy_file_share_times" {
   description = "The list of times of the day to perform the backup in 24-hour format. Times must be either on the hour or half hour(eg: `12:00`, `12:30`, `13:00`,etc)."
   type        = list(string)
   default     = [""]
@@ -239,6 +257,12 @@ variable "backup_policy_file_share_daily_retention_count" {
 variable "backup_protected_file_share_enabled" {
   description = "Boolean flag which describes whether or not enable the backup for the protected file share."
   default     = false
+}
+
+variable "existing_backup_file_share_policy_ids" {
+  description = "The list of existing backup file share policy IDs."
+  type        = list(string)
+  default     = [""]
 }
 
 variable "backup_protected_file_share_source_storage_account_ids" {

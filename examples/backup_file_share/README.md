@@ -1,4 +1,4 @@
-## Standard example
+## Backup file share example
 
 ## Usage
 ```
@@ -26,13 +26,6 @@ terraform destroy
 
 ## Outputs
 
-| Name | Description |
-|------|-------------|
-| network\_mapping\_ids | n/a |
-| protected\_vm\_ids | n/a |
-| replicated\_vm\_ids | n/a |
-| replication\_policy\_ids | n/a |
-| service\_vault\_ids | n/a |
-| vm\_protection\_policy\_ids | n/a |
+No output.
 
 <!-- END OF PRE-COMMIT-TERRAFORM DOCS HOOK -->
