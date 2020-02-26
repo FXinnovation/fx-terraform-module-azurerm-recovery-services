@@ -28,11 +28,11 @@ terraform destroy
 
 | Name | Description |
 |------|-------------|
-| network\_mapping\_ids | n/a |
-| protected\_vm\_ids | n/a |
-| replicated\_vm\_ids | n/a |
-| replication\_policy\_ids | n/a |
-| service\_vault\_ids | n/a |
-| vm\_protection\_policy\_ids | n/a |
+| backup\_file\_share\_policy\_ids | n/a |
+| backup\_protected\_file\_share\_ids | n/a |
+| backup\_protected\_vm\_ids | n/a |
+| backup\_vm\_policy\_ids | n/a |
+| recovery\_service\_vault\_ids | n/a |
+| storage\_container\_ids | n/a |
 
 <!-- END OF PRE-COMMIT-TERRAFORM DOCS HOOK -->

@@ -26,6 +26,13 @@ terraform destroy
 
 ## Outputs
 
-No output.
+| Name | Description |
+|------|-------------|
+| backup\_file\_share\_policy\_ids | n/a |
+| backup\_protected\_file\_share\_ids | n/a |
+| backup\_protected\_vm\_ids | n/a |
+| backup\_vm\_policy\_ids | n/a |
+| recovery\_service\_vault\_ids | n/a |
+| storage\_container\_ids | n/a |
 
 <!-- END OF PRE-COMMIT-TERRAFORM DOCS HOOK -->

@@ -2,7 +2,7 @@
 # Recovery service vault
 ###
 
-output "recovery_vault_ids" {
+output "recovery_vault_id" {
   description = "The ID of the recovery service vault."
   value       = azurerm_recovery_services_vault.this.*.id
 }
