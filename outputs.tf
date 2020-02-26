@@ -11,7 +11,7 @@ output "recovery_vault_id" {
 # Backup conatiner storage account
 ###
 
-output "backup_storage_account_conatiner_ids" {
+output "backup_storage_account_container_ids" {
   description = "The IDs of the backup storage account container."
   value       = compact(concat(azurerm_backup_container_storage_account.this_container.*.id, [""]))
 }

@@ -66,7 +66,7 @@ See `examples` folders for usage of this module.
 | backup\_file\_share\_policy\_ids | The IDs of the backup file share policies. |
 | backup\_protected\_file\_share\_ids | The IDs of the backup protected file shares. |
 | backup\_protected\_vm\_ids | The IDs of the backup protected VMs. |
-| backup\_storage\_account\_conatiner\_ids | The IDs of the backup storage account container. |
+| backup\_storage\_account\_container\_ids | The IDs of the backup storage account container. |
 | backup\_vm\_policy\_ids | The IDs of the backup VM policies. |
 | recovery\_vault\_id | The ID of the recovery service vault. |
 
