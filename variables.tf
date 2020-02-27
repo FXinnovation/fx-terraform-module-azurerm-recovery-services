@@ -192,7 +192,7 @@ variable "backup_vm_policy_id_names" {
   default     = [""]
 }
 
-variable "existing_backup_policy_ids" {
+variable "existing_backup_vm_policy_ids" {
   description = "List of the existing backup policy IDs which will be used to backup the VMs."
   type        = list(string)
   default     = [""]

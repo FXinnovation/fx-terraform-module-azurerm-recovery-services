@@ -50,7 +50,7 @@ See `examples` folders for usage of this module.
 | backup\_weekdays | List of days of the week to perform backups on. Must be one of `Sunday`, `Monday`, `Tuesday`, `Wednesday`, `Thursday`, `Friday` or `Saturday`. | `list(list(string))` | <pre>[<br>  null<br>]</pre> | no |
 | enabled | Enable or disable module. | `bool` | `true` | no |
 | existing\_backup\_file\_share\_policy\_ids | The list of existing backup file share policy IDs. | `list(string)` | <pre>[<br>  ""<br>]</pre> | no |
-| existing\_backup\_policy\_ids | List of the existing backup policy IDs which will be used to backup the VMs. | `list(string)` | <pre>[<br>  ""<br>]</pre> | no |
+| existing\_backup\_vm\_policy\_ids | List of the existing backup policy IDs which will be used to backup the VMs. | `list(string)` | <pre>[<br>  ""<br>]</pre> | no |
 | recovery\_service\_vault\_location | The supported Azure locations where the resource exists. Changing this force a new resource to be created. | `string` | n/a | yes |
 | recovery\_service\_vault\_name | The name of the recovery service vaults.Changing  this forces a new resource to be created. | `string` | n/a | yes |
 | recovery\_service\_vault\_sku | SKU of the service vault which will be created. Posssible values are `Standard`, `RS0`. | `string` | n/a | yes |
