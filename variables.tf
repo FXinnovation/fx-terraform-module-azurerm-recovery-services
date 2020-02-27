@@ -80,22 +80,22 @@ variable "backup_vm_policy_count" {
 variable "backup_vm_policy_names" {
   description = "The names of the backup VM policies. Changing this force a new resource to be created."
   type        = list(string)
-  default     = [""]
+  default     = []
 }
 
-variable "backup_timezone" {
+variable "backup_timezones" {
   description = "List which specifies the timezones. Defaults to `UTC`."
   type        = list(string)
   default     = ["UTC"]
 }
 
-variable "backup_frequency" {
+variable "backup_frequencies" {
   description = "If specified , it defines  the frequency of backups. Must be either `Daily` or `Weekly`."
   type        = list(string)
   default     = [""]
 }
 
-variable "backup_time" {
+variable "backup_times" {
   description = "The list times of day to perform the backup in 24hour format."
   type        = list(string)
   default     = [""]
@@ -107,12 +107,12 @@ variable "backup_weekdays" {
   default     = [null]
 }
 
-variable "backup_retention_daily_count" {
+variable "backup_retention_daily_counts" {
   description = "A list of which specifies the number of daily backups to keep. Must be between 1 and 9999."
   type        = list(number)
   default     = [1]
 }
-variable "backup_retention_weekly_count" {
+variable "backup_retention_weekly_counts" {
   description = "A list of which specifies the of weekly backups to keep. Must be between 1 and 9999."
   type        = list(number)
   default     = [0]
@@ -124,7 +124,7 @@ variable "backup_rentntion_weekdays" {
   default     = [null]
 }
 
-variable "backup_retention_monthly_count" {
+variable "backup_retention_monthly_counts" {
   description = "A list which specifies the number of monthly backups to keep. Must be between 1 and 9999."
   type        = list(number)
   default     = [0]
@@ -142,7 +142,7 @@ variable "backup_retention_monthly_weeks" {
   default     = [null]
 }
 
-variable "backup_retention_yearly_count" {
+variable "backup_retention_yearly_counts" {
   description = "A list which specifies the number of yearly backups to keep. Must be between 1 and 9999."
   type        = list(number)
   default     = [0]
@@ -192,7 +192,7 @@ variable "backup_vm_policy_id_names" {
   default     = [""]
 }
 
-variable "existing_backup_policy_id" {
+variable "existing_backup_policy_ids" {
   description = "List of the existing backup policy IDs which will be used to backup the VMs."
   type        = list(string)
   default     = [""]
@@ -243,7 +243,7 @@ variable "backup_policy_file_share_times" {
   default     = [""]
 }
 
-variable "backup_policy_file_share_daily_retention_count" {
+variable "backup_policy_file_share_daily_retention_counts" {
   description = "The list of number of the daily backup to keep. Must be between `1` and `180`."
   type        = list(number)
   default     = [1]
