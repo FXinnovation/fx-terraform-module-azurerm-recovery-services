@@ -30,12 +30,14 @@ module "example" {
   recovery_service_vault_location = "Canada Central"
   recovery_service_vault_sku      = "Standard"
 
-  backup_storage_container_enabled     = true
-  backup_container_storage_account_ids = ["${azurerm_storage_account.example.id}"]
-  backup_policy_file_share_enabled     = true
-  backup_policy_file_share_names       = ["tf${random_string.this.result}"]
-  backup_policy_file_share_timezones   = ["America/Toronto"]
-
+  backup_storage_container_enabled               = true
+  backup_container_storage_account_ids           = ["${azurerm_storage_account.example.id}"]
+  backup_policy_file_share_enabled               = true
+  backup_policy_file_share_names                 = ["tf${random_string.this.result}"]
+  backup_policy_file_share_frequencies           = ["Daily"]
+  backup_policy_file_share_times                 = ["09:30"]
+  backup_policy_file_share_daily_retention_count = [12]
+  backup_policy_file_share_timezones             = ["America/Toronto"]
 
   backup_protected_file_share_enabled                    = true
   backup_protected_file_share_source_storage_account_ids = ["${azurerm_storage_account.example.id}"]

@@ -158,7 +158,7 @@ resource "azurerm_backup_policy_file_share" "this" {
     for_each = element(var.backup_policy_file_share_frequencies, count.index) == "Daily" ? [1] : []
 
     content {
-      count = element(var.backup_policy_file_share_daily_retention_count, count.index)
+      count = element(var.backup_policy_file_share_daily_retention_counts, count.index)
     }
   }
 
