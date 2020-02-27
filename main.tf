@@ -175,5 +175,5 @@ resource "azurerm_backup_protected_file_share" "this" {
   recovery_vault_name       = var.recovery_service_vault_name
   source_storage_account_id = element(var.backup_protected_file_share_source_storage_account_ids, count.index)
   source_file_share_name    = element(var.backup_protected_file_share_source_file_share_names, count.index)
-  backup_policy_id          = element(compcat(concat(concat(azurerm_backup_policy_file_share.this.*.id, [""]), var.existing_backup_file_share_policy_ids)), count.index)
+  backup_policy_id          = element(compact(concat(concat(azurerm_backup_policy_file_share.this.*.id, [""]), var.existing_backup_file_share_policy_ids)), count.index)
 }
