@@ -20,15 +20,23 @@ resource "azurerm_storage_account" "example" {
 resource "azurerm_storage_share" "example" {
   name                 = "tftest${random_string.this.result}"
   storage_account_name = "${azurerm_storage_account.example.name}"
+  metadata             = {}
+
+  lifecycle {
+    ignore_changes = [
+      metadata,
+    ]
+  }
 }
 
 module "example" {
   source = "../.."
 
-  resource_group_name             = "${azurerm_resource_group.example.name}"
-  recovery_service_vault_name     = "foo${random_string.this.result}"
-  recovery_service_vault_location = "${azurerm_resource_group.example.location}"
-  recovery_service_vault_sku      = "Standard"
+  resource_group_name                        = "${azurerm_resource_group.example.name}"
+  recovery_service_vault_name                = "foo${random_string.this.result}"
+  recovery_service_vault_location            = "${azurerm_resource_group.example.location}"
+  recovery_service_vault_sku                 = "Standard"
+  recovery_service_vault_soft_delete_enabled = false
 
   backup_policy_file_share_enabled                = true
   backup_policy_file_share_count                  = 1
