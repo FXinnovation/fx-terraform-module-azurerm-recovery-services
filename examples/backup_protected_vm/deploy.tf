@@ -70,7 +70,7 @@ resource "azurerm_virtual_machine" "vm" {
 
 
 module "example" {
-  source = "../test/module"
+  source = "../.."
 
   resource_group_name                        = "${azurerm_resource_group.example.name}"
   recovery_service_vault_name                = "test${random_string.this.result}"
