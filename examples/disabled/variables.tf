@@ -1,15 +1,19 @@
 variable "client_id" {
-  type = string
+  description = "Azure service principal application Id."
+  type        = string
 }
 
 variable "client_secret" {
-  type = string
+  description = "Azure service principal application Secret."
+  type        = string
 }
 
 variable "subscription_id" {
-  type = string
+  description = "Azure subscription Id."
+  type        = string
 }
 
 variable "tenant_id" {
-  type = string
+  description = "Azure tenant Id."
+  type        = string
 }

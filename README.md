@@ -30,11 +30,11 @@ See `examples` folders for usage of this module.
 | backup\_protected\_source\_vm\_ids | The IDs of the VMs to backup. Changing this forces a new resource to be created. | `list(string)` | <pre>[<br>  ""<br>]</pre> | no |
 | backup\_protected\_vm\_enabled | Boolean whcih specifies to enable or not for the backup protected VMs. | `bool` | `false` | no |
 | backup\_protected\_vm\_tags | Tags whcih will be associated to the backup protected VMs. | `map` | `{}` | no |
-| backup\_rentntion\_weekdays | List of days of the week to perform backups on. Must be one of `Sunday`, `Monday`, `Tuesday`, `Wednesday`, `Thursday`, `Friday` or `Saturday`. | `list(list(string))` | <pre>[<br>  null<br>]</pre> | no |
 | backup\_retention\_daily\_counts | A list of which specifies the number of daily backups to keep. Must be between 1 and 9999. | `list(number)` | <pre>[<br>  1<br>]</pre> | no |
 | backup\_retention\_monthly\_counts | A list which specifies the number of monthly backups to keep. Must be between 1 and 9999. | `list(number)` | <pre>[<br>  0<br>]</pre> | no |
 | backup\_retention\_monthly\_weekdays | The list weekday backups to retain . Must be one of `Sunday`, `Monday`, `Tuesday`, `Wednesday`, `Thursday`, `Friday` or `Saturday`. | `list(list(string))` | <pre>[<br>  null<br>]</pre> | no |
 | backup\_retention\_monthly\_weeks | The list of weeks of the month to retain backups of. Must be one of `First`, `Second`, `Third`, `Fourth`, `Last`. | `list(list(string))` | <pre>[<br>  null<br>]</pre> | no |
+| backup\_retention\_weekdays | List of days of the week to perform backups on. Must be one of `Sunday`, `Monday`, `Tuesday`, `Wednesday`, `Thursday`, `Friday` or `Saturday`. | `list(list(string))` | <pre>[<br>  null<br>]</pre> | no |
 | backup\_retention\_weekly\_counts | A list of which specifies the of weekly backups to keep. Must be between 1 and 9999. | `list(number)` | <pre>[<br>  0<br>]</pre> | no |
 | backup\_retention\_yearly\_counts | A list which specifies the number of yearly backups to keep. Must be between 1 and 9999. | `list(number)` | <pre>[<br>  0<br>]</pre> | no |
 | backup\_retention\_yearly\_months | The months of the year to retain backups of. Must be one of `January`, `February`, `March`, `April`, `May`, `June`, `July`, `Augest`, `September`, `October`, `November` and `December`. | `list(list(string))` | <pre>[<br>  null<br>]</pre> | no |
@@ -46,7 +46,7 @@ See `examples` folders for usage of this module.
 | backup\_vm\_policy\_count | Specifies the number of backup policies we would like to create. | `number` | `1` | no |
 | backup\_vm\_policy\_enabled | Boolean flag which decribes whether or not to enable the backup policy for VMs. | `bool` | `false` | no |
 | backup\_vm\_policy\_id\_names | The list of names the backup policy IDs which should be used to backup the protected VMs. | `list(string)` | <pre>[<br>  ""<br>]</pre> | no |
-| backup\_vm\_policy\_names | The names of the backup VM policies. Changing this force a new resource to be created. | `list(string)` | `[]` | no |
+| backup\_vm\_policy\_names | The names of the backup VM policies. Changing this force a new resource to be created. | `list(string)` | <pre>[<br>  ""<br>]</pre> | no |
 | backup\_weekdays | List of days of the week to perform backups on. Must be one of `Sunday`, `Monday`, `Tuesday`, `Wednesday`, `Thursday`, `Friday` or `Saturday`. | `list(list(string))` | <pre>[<br>  null<br>]</pre> | no |
 | enabled | Enable or disable module. | `bool` | `true` | no |
 | existing\_backup\_file\_share\_policy\_ids | The list of existing backup file share policy IDs. | `list(string)` | <pre>[<br>  ""<br>]</pre> | no |

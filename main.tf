@@ -39,6 +39,8 @@ resource "azurerm_backup_container_storage_account" "this_container" {
   resource_group_name = var.resource_group_name
   recovery_vault_name = var.recovery_service_vault_name
   storage_account_id  = element(var.backup_container_storage_account_ids, count.index)
+
+  depends_on = [azurerm_recovery_services_vault.this]
 }
 
 ###
@@ -50,7 +52,7 @@ resource "azurerm_backup_policy_vm" "this" {
 
   name                = element(var.backup_vm_policy_names, count.index)
   resource_group_name = var.resource_group_name
-  recovery_vault_name = var.recovery_service_vault_name
+  recovery_vault_name = azurerm_recovery_services_vault.this[count.index].name
 
   timezone = element(var.backup_timezones, count.index)
 
@@ -77,7 +79,7 @@ resource "azurerm_backup_policy_vm" "this" {
 
     content {
       count    = element(var.backup_retention_weekly_counts, count.index)
-      weekdays = element(var.backup_rentntion_weekdays, count.index)
+      weekdays = element(var.backup_retention_weekdays, count.index)
     }
   }
 
@@ -141,7 +143,7 @@ resource "azurerm_backup_policy_file_share" "this" {
 
   name                = element(var.backup_policy_file_share_names, count.index)
   resource_group_name = var.resource_group_name
-  recovery_vault_name = var.recovery_service_vault_name
+  recovery_vault_name = azurerm_recovery_services_vault.this[count.index].name
   timezone            = element(var.backup_policy_file_share_timezones, count.index)
 
   dynamic "backup" {
@@ -171,8 +173,8 @@ resource "azurerm_backup_protected_file_share" "this" {
   count = local.should_create_backup_protected_file_share ? length(var.backup_protected_file_share_source_file_share_names) : 0
 
   resource_group_name       = var.resource_group_name
-  recovery_vault_name       = var.recovery_service_vault_name
-  source_storage_account_id = element(var.backup_protected_file_share_source_storage_account_ids, count.index)
+  recovery_vault_name       = azurerm_recovery_services_vault.this[count.index].name
+  source_storage_account_id = element(azurerm_backup_container_storage_account.this_container.*.storage_account_id, count.index)
   source_file_share_name    = element(var.backup_protected_file_share_source_file_share_names, count.index)
   backup_policy_id          = element(compact(concat(concat(azurerm_backup_policy_file_share.this.*.id, [""]), var.existing_backup_file_share_policy_ids)), count.index)
 }

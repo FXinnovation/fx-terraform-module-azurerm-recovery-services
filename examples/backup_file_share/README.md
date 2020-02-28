@@ -19,10 +19,10 @@ terraform destroy
 
 | Name | Description | Type | Default | Required |
 |------|-------------|------|---------|:-----:|
-| client\_id | n/a | `string` | n/a | yes |
-| client\_secret | n/a | `string` | n/a | yes |
-| subscription\_id | n/a | `string` | n/a | yes |
-| tenant\_id | n/a | `string` | n/a | yes |
+| client\_id | Azure service principal application Id. | `string` | n/a | yes |
+| client\_secret | Azure service principal application Secret. | `string` | n/a | yes |
+| subscription\_id | Azure subscription Id. | `string` | n/a | yes |
+| tenant\_id | Azure tenant Id. | `string` | n/a | yes |
 
 ## Outputs
 

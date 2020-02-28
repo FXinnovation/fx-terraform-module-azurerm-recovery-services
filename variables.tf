@@ -80,7 +80,7 @@ variable "backup_vm_policy_count" {
 variable "backup_vm_policy_names" {
   description = "The names of the backup VM policies. Changing this force a new resource to be created."
   type        = list(string)
-  default     = []
+  default     = [""]
 }
 
 variable "backup_timezones" {
@@ -118,7 +118,7 @@ variable "backup_retention_weekly_counts" {
   default     = [0]
 }
 
-variable "backup_rentntion_weekdays" {
+variable "backup_retention_weekdays" {
   description = "List of days of the week to perform backups on. Must be one of `Sunday`, `Monday`, `Tuesday`, `Wednesday`, `Thursday`, `Friday` or `Saturday`."
   type        = list(list(string))
   default     = [null]
