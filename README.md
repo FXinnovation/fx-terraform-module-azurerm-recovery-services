@@ -3,6 +3,10 @@
 ## Usage
 See `examples` folders for usage of this module.
 
+## Limitation
+- Any call of this module will create resources in a single resource group.
+- By default soft delete option for recovery service key vault will be enabled. when trying to delete the resource make sure to unregister\stop all the backup in the service key vault. If not Terraform will throw an exeception.
+
 <!-- BEGINNING OF PRE-COMMIT-TERRAFORM DOCS HOOK -->
 ## Providers
 
@@ -23,13 +27,11 @@ See `examples` folders for usage of this module.
 | backup\_policy\_file\_share\_names | A list which specifies the names of the policy. Changing this forces a new resource to be created. | `list(string)` | <pre>[<br>  ""<br>]</pre> | no |
 | backup\_policy\_file\_share\_times | The list of times of the day to perform the backup in 24-hour format. Times must be either on the hour or half hour(eg: `12:00`, `12:30`, `13:00`,etc). | `list(string)` | <pre>[<br>  ""<br>]</pre> | no |
 | backup\_policy\_file\_share\_timezones | The list of the timezones. Default to `UTC`. | `list(string)` | <pre>[<br>  ""<br>]</pre> | no |
-| backup\_policy\_vm\_tags | Tags which will asssociated to the backup VM policies. | `map` | `{}` | no |
 | backup\_protected\_file\_share\_enabled | Boolean flag which describes whether or not enable the backup for the protected file share. | `bool` | `false` | no |
 | backup\_protected\_file\_share\_source\_file\_share\_names | Spcifies the names of the file share to backup. Changing this forces a new resource to be created. | `list(string)` | <pre>[<br>  ""<br>]</pre> | no |
 | backup\_protected\_file\_share\_source\_storage\_account\_ids | The list of IDs of the stoarge account of the fileshare to backup. Changing this forces a new resource to be created. | `list(string)` | <pre>[<br>  ""<br>]</pre> | no |
 | backup\_protected\_source\_vm\_ids | The IDs of the VMs to backup. Changing this forces a new resource to be created. | `list(string)` | <pre>[<br>  ""<br>]</pre> | no |
 | backup\_protected\_vm\_enabled | Boolean whcih specifies to enable or not for the backup protected VMs. | `bool` | `false` | no |
-| backup\_protected\_vm\_tags | Tags whcih will be associated to the backup protected VMs. | `map` | `{}` | no |
 | backup\_retention\_daily\_counts | A list of which specifies the number of daily backups to keep. Must be between 1 and 9999. | `list(number)` | <pre>[<br>  1<br>]</pre> | no |
 | backup\_retention\_monthly\_counts | A list which specifies the number of monthly backups to keep. Must be between 1 and 9999. | `list(number)` | <pre>[<br>  0<br>]</pre> | no |
 | backup\_retention\_monthly\_weekdays | The list weekday backups to retain . Must be one of `Sunday`, `Monday`, `Tuesday`, `Wednesday`, `Thursday`, `Friday` or `Saturday`. | `list(list(string))` | <pre>[<br>  null<br>]</pre> | no |

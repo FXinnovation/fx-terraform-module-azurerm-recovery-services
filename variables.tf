@@ -166,11 +166,6 @@ variable "backup_retention_yearly_months" {
   default     = [null]
 }
 
-variable "backup_policy_vm_tags" {
-  description = "Tags which will asssociated to the backup VM policies."
-  default     = {}
-}
-
 ###
 # Backup protected VM
 ###
@@ -196,11 +191,6 @@ variable "existing_backup_vm_policy_ids" {
   description = "List of the existing backup policy IDs which will be used to backup the VMs."
   type        = list(string)
   default     = [""]
-}
-
-variable "backup_protected_vm_tags" {
-  description = "Tags whcih will be associated to the backup protected VMs."
-  default     = {}
 }
 
 ###

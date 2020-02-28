@@ -103,14 +103,6 @@ resource "azurerm_backup_policy_vm" "this" {
       months   = element(var.backup_retention_yearly_months, count.index)
     }
   }
-
-  tags = merge(
-    var.tags,
-    var.backup_policy_vm_tags,
-    {
-      "Terraform" = "true"
-    }
-  )
 }
 
 ###
@@ -124,14 +116,6 @@ resource "azurerm_backup_protected_vm" "this_vm" {
   recovery_vault_name = var.recovery_service_vault_name
   source_vm_id        = element(var.backup_protected_source_vm_ids, count.index)
   backup_policy_id    = element(compact(concat(concat(azurerm_backup_policy_vm.this.*.id, [""]), var.existing_backup_vm_policy_ids)), count.index)
-
-  tags = merge(
-    var.tags,
-    var.backup_protected_vm_tags,
-    {
-      "Terraform" = "true"
-    }
-  )
 }
 
 ###
