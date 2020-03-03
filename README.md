@@ -5,7 +5,7 @@ See `examples` folders for usage of this module.
 
 ## Limitation
 - Any call of this module will create resources in a single resource group.
-- By default soft delete option for recovery service key vault will be enabled. when trying to delete the resource make sure to unregister\stop all the backup in the service key vault. If not Terraform will throw an exeception.
+- By default soft delete option for recovery service key vault will be enabled. When trying to delete the recovery service vault resource make sure to unregister\stop all the VMs and storage files share backup in the recovery service key vault. If not Terraform will throw an exception.
 
 <!-- BEGINNING OF PRE-COMMIT-TERRAFORM DOCS HOOK -->
 ## Providers
@@ -34,7 +34,7 @@ See `examples` folders for usage of this module.
 | backup\_protected\_vm\_enabled | Boolean whcih specifies to enable or not for the backup protected VMs. | `bool` | `false` | no |
 | backup\_retention\_daily\_counts | A list of which specifies the number of daily backups to keep. Must be between 1 and 9999. | `list(number)` | <pre>[<br>  1<br>]</pre> | no |
 | backup\_retention\_monthly\_counts | A list which specifies the number of monthly backups to keep. Must be between 1 and 9999. | `list(number)` | <pre>[<br>  0<br>]</pre> | no |
-| backup\_retention\_monthly\_weekdays | The list weekday backups to retain . Must be one of `Sunday`, `Monday`, `Tuesday`, `Wednesday`, `Thursday`, `Friday` or `Saturday`. | `list(list(string))` | <pre>[<br>  null<br>]</pre> | no |
+| backup\_retention\_monthly\_weekdays | The list weekdays to retain backups. Must be one of `Sunday`, `Monday`, `Tuesday`, `Wednesday`, `Thursday`, `Friday` or `Saturday`. | `list(list(string))` | <pre>[<br>  null<br>]</pre> | no |
 | backup\_retention\_monthly\_weeks | The list of weeks of the month to retain backups of. Must be one of `First`, `Second`, `Third`, `Fourth`, `Last`. | `list(list(string))` | <pre>[<br>  null<br>]</pre> | no |
 | backup\_retention\_weekdays | List of days of the week to perform backups on. Must be one of `Sunday`, `Monday`, `Tuesday`, `Wednesday`, `Thursday`, `Friday` or `Saturday`. | `list(list(string))` | <pre>[<br>  null<br>]</pre> | no |
 | backup\_retention\_weekly\_counts | A list of which specifies the of weekly backups to keep. Must be between 1 and 9999. | `list(number)` | <pre>[<br>  0<br>]</pre> | no |

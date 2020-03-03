@@ -5,12 +5,12 @@ resource "random_string" "this" {
 }
 
 resource "azurerm_resource_group" "example" {
-  name     = "boo${random_string.this.result}"
+  name     = "tftest${random_string.this.result}"
   location = "Canada Central"
 }
 
 resource "azurerm_storage_account" "example" {
-  name                     = "toto${random_string.this.result}"
+  name                     = "tftest${random_string.this.result}"
   location                 = "${azurerm_resource_group.example.location}"
   resource_group_name      = "${azurerm_resource_group.example.name}"
   account_tier             = "Standard"
@@ -33,7 +33,7 @@ module "example" {
   source = "../.."
 
   resource_group_name                        = "${azurerm_resource_group.example.name}"
-  recovery_service_vault_name                = "foo${random_string.this.result}"
+  recovery_service_vault_name                = "tftest${random_string.this.result}"
   recovery_service_vault_location            = "${azurerm_resource_group.example.location}"
   recovery_service_vault_sku                 = "Standard"
   recovery_service_vault_soft_delete_enabled = false

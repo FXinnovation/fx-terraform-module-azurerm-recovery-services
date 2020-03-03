@@ -131,7 +131,7 @@ variable "backup_retention_monthly_counts" {
 }
 
 variable "backup_retention_monthly_weekdays" {
-  description = "The list weekday backups to retain . Must be one of `Sunday`, `Monday`, `Tuesday`, `Wednesday`, `Thursday`, `Friday` or `Saturday`."
+  description = "The list weekdays to retain backups. Must be one of `Sunday`, `Monday`, `Tuesday`, `Wednesday`, `Thursday`, `Friday` or `Saturday`."
   type        = list(list(string))
   default     = [null]
 }

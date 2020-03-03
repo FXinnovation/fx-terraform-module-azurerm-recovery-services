@@ -10,21 +10,21 @@ resource "azurerm_resource_group" "example" {
 }
 
 resource "azurerm_virtual_network" "example" {
-  name                = "example-network${random_string.this.result}"
+  name                = "tftest${random_string.this.result}"
   address_space       = ["10.0.0.0/16"]
   location            = azurerm_resource_group.example.location
   resource_group_name = azurerm_resource_group.example.name
 }
 
 resource "azurerm_subnet" "example" {
-  name                 = "internal${random_string.this.result}"
+  name                 = "tftest${random_string.this.result}"
   resource_group_name  = azurerm_resource_group.example.name
   virtual_network_name = azurerm_virtual_network.example.name
   address_prefix       = "10.0.2.0/24"
 }
 
 resource "azurerm_network_interface" "vm" {
-  name                = "example-nic${random_string.this.result}"
+  name                = "tftest${random_string.this.result}"
   location            = azurerm_resource_group.example.location
   resource_group_name = azurerm_resource_group.example.name
 
@@ -36,7 +36,7 @@ resource "azurerm_network_interface" "vm" {
 }
 
 resource "azurerm_virtual_machine" "vm" {
-  name                  = "tf${random_string.this.result}"
+  name                  = "tftest${random_string.this.result}"
   location              = azurerm_resource_group.example.location
   resource_group_name   = azurerm_resource_group.example.name
   vm_size               = "Standard_B1s"
@@ -73,14 +73,14 @@ module "example" {
   source = "../.."
 
   resource_group_name                        = "${azurerm_resource_group.example.name}"
-  recovery_service_vault_name                = "test${random_string.this.result}"
+  recovery_service_vault_name                = "tftest${random_string.this.result}"
   recovery_service_vault_location            = "${azurerm_resource_group.example.location}"
   recovery_service_vault_sku                 = "Standard"
   recovery_service_vault_soft_delete_enabled = false
 
   backup_vm_policy_enabled          = true
   backup_vm_policy_count            = 1
-  backup_vm_policy_names            = ["tot${random_string.this.result}"]
+  backup_vm_policy_names            = ["tftest${random_string.this.result}"]
   backup_timezones                  = ["UTC"]
   backup_frequencies                = ["Daily"]
   backup_times                      = ["23:00"]

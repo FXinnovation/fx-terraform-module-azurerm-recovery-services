@@ -8,7 +8,7 @@ output "recovery_vault_id" {
 }
 
 ###
-# Backup conatiner storage account
+# Backup container storage account
 ###
 
 output "backup_storage_account_container_ids" {
