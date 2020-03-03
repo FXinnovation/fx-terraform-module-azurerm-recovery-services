@@ -12,7 +12,7 @@ terraform destroy
 
 | Name | Version |
 |------|---------|
-| azurerm | >=2.0.0 |
+| azurerm |  >=1.36.0, < 2.0.0 |
 | random | n/a |
 
 ## Inputs

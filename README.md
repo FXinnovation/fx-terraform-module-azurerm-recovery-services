@@ -12,7 +12,7 @@ See `examples` folders for usage of this module.
 
 | Name | Version |
 |------|---------|
-| azurerm | =2.0.0 |
+| azurerm | >=1.36.0, < 2.0.0 |
 
 ## Inputs
 
