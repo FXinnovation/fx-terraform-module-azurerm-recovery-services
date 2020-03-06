@@ -1,66 +1,164 @@
+locals {
+  should_create_backup_container            = var.enabled && var.backup_storage_container_enabled
+  should_create_backup_vm_policy            = var.enabled && var.backup_vm_policy_enabled
+  should_create_backup_protected_vm         = var.enabled && var.backup_protected_vm_enabled
+  should_create_backup_policy_file_share    = var.enabled && var.backup_policy_file_share_enabled
+  should_create_backup_protected_file_share = var.enabled && var.backup_protected_file_share_enabled
+}
+
+
+###
+# Recovery service vault
+###
+
 resource "azurerm_recovery_services_vault" "this" {
-  name                = var.recovery_vault_name
-  location            = data.azurerm_resource_group.rg.location
+  count = var.enabled ? 1 : 0
+
+  name                = var.recovery_service_vault_name
+  sku                 = var.recovery_service_vault_sku
+  location            = var.recovery_service_vault_location
   resource_group_name = var.resource_group_name
-  sku                 = "Standard"
+  soft_delete_enabled = var.recovery_service_vault_soft_delete_enabled
+
+  tags = merge(
+    var.tags,
+    var.recovery_service_vault_tags,
+    {
+      "Terraform" = "true"
+    }
+  )
 }
 
-resource "azurerm_recovery_services_protection_policy_vm" "this" {
-  name                = "${var.recovery_vault_name}-protection-policy"
+###
+# Backup container storage account
+###
+
+resource "azurerm_backup_container_storage_account" "this_container" {
+  count = local.should_create_backup_container ? length(var.backup_container_storage_account_ids) : 0
+
   resource_group_name = var.resource_group_name
-  recovery_vault_name = azurerm_recovery_services_vault.this.name
+  recovery_vault_name = var.recovery_service_vault_name
+  storage_account_id  = element(var.backup_container_storage_account_ids, count.index)
 
-  timezone = var.backup_timezone
+  depends_on = [azurerm_recovery_services_vault.this]
+}
 
-  backup {
-    frequency = var.backup_frequency
-    time      = var.backup_time
-    weekdays  = var.backup_frequency == "Weekly" ? var.backup_weekdays : []
+###
+# Backup policy VM
+###
+
+resource "azurerm_backup_policy_vm" "this" {
+  count = local.should_create_backup_vm_policy ? var.backup_vm_policy_count : 0
+
+  name                = element(var.backup_vm_policy_names, count.index)
+  resource_group_name = var.resource_group_name
+  recovery_vault_name = element(azurerm_recovery_services_vault.this.*.name, count.index)
+
+  timezone = element(var.backup_timezones, count.index)
+
+  dynamic "backup" {
+    for_each = element(var.backup_frequencies, count.index) != "" ? [1] : []
+
+    content {
+      frequency = element(var.backup_frequencies, count.index)
+      time      = element(var.backup_times, count.index)
+      weekdays  = element(var.backup_frequencies, count.index) == "Weekly" ? element(var.backup_weekdays, count.index) : []
+    }
   }
 
-  // To be included only if backup frequency is daily
   dynamic "retention_daily" {
-    for_each = var.backup_frequency == "Daily" ? [1] : []
+    for_each = element(var.backup_frequencies, count.index) == "Daily" ? [1] : []
+
     content {
-      count = var.backup_retention_daily_count < 7 ? 7 : var.backup_retention_daily_count
+      count = element(var.backup_retention_daily_counts, count.index)
     }
   }
 
-  # To be included only if a weekly retention count is defined or if frequency is weekly
   dynamic "retention_weekly" {
-    for_each = var.backup_retention_weekly_count > 0 || var.backup_frequency == "Weekly" ? [1] : []
+    for_each = element(var.backup_retention_weekly_counts, count.index) > 0 || element(var.backup_frequencies, count.index) == "Weekly" ? [1] : []
+
     content {
-      count    = var.backup_retention_weekly_count > 0 ? var.backup_retention_weekly_count : 12
-      weekdays = var.backup_weekdays
+      count    = element(var.backup_retention_weekly_counts, count.index)
+      weekdays = element(var.backup_retention_weekdays, count.index)
     }
   }
 
-  # To be included only if a monthly retention count is defined
   dynamic "retention_monthly" {
-    for_each = var.backup_retention_monthly_count > 0 ? [1] : []
+    for_each = element(var.backup_retention_monthly_counts, count.index) > 0 ? [1] : []
+
     content {
-      count    = var.backup_retention_monthly_count
-      weekdays = var.backup_retention_monthly_weekdays
-      weeks    = var.backup_retention_monthly_weeks
+      count    = element(var.backup_retention_monthly_counts, count.index)
+      weekdays = element(var.backup_retention_monthly_weekdays, count.index)
+      weeks    = element(var.backup_retention_monthly_weeks, count.index)
     }
   }
 
-  # To be included only if a yearly retention count is defined
   dynamic "retention_yearly" {
-    for_each = var.backup_retention_monthly_count > 0 ? [1] : []
+    for_each = element(var.backup_retention_yearly_counts, count.index) > 0 ? [1] : []
+
     content {
-      count    = var.backup_retention_yearly_count
-      weekdays = var.backup_retention_yearly_weekdays
-      weeks    = var.backup_retention_yearly_weeks
-      months   = var.backup_retention_yearly_months
+      count    = element(var.backup_retention_yearly_counts, count.index)
+      weekdays = element(var.backup_retention_yearly_weekdays, count.index)
+      weeks    = element(var.backup_retention_yearly_weeks, count.index)
+      months   = element(var.backup_retention_yearly_months, count.index)
     }
   }
 }
 
-resource "azurerm_recovery_services_protected_vm" "this" {
-  count               = length(var.source_vm_ids)
+###
+# Backup protected VM
+###
+
+resource "azurerm_backup_protected_vm" "this_vm" {
+  count = local.should_create_backup_protected_vm ? length(var.backup_protected_source_vm_ids) : 0
+
   resource_group_name = var.resource_group_name
-  recovery_vault_name = azurerm_recovery_services_vault.this.name
-  source_vm_id        = var.source_vm_ids[count.index]
-  backup_policy_id    = azurerm_recovery_services_protection_policy_vm.this.id
+  recovery_vault_name = var.recovery_service_vault_name
+  source_vm_id        = element(var.backup_protected_source_vm_ids, count.index)
+  backup_policy_id    = element(compact(concat(concat(azurerm_backup_policy_vm.this.*.id, [""]), var.existing_backup_vm_policy_ids)), count.index)
+}
+
+###
+# Backup policy file share
+###
+
+resource "azurerm_backup_policy_file_share" "this" {
+  count = local.should_create_backup_policy_file_share ? var.backup_policy_file_share_count : 0
+
+  name                = element(var.backup_policy_file_share_names, count.index)
+  resource_group_name = var.resource_group_name
+  recovery_vault_name = element(azurerm_recovery_services_vault.this.*.name, count.index)
+  timezone            = element(var.backup_policy_file_share_timezones, count.index)
+
+  dynamic "backup" {
+    for_each = element(var.backup_policy_file_share_frequencies, count.index) != "" ? [1] : []
+
+    content {
+      frequency = element(var.backup_policy_file_share_frequencies, count.index)
+      time      = element(var.backup_policy_file_share_times, count.index)
+    }
+  }
+
+  dynamic "retention_daily" {
+    for_each = element(var.backup_policy_file_share_frequencies, count.index) == "Daily" ? [1] : []
+
+    content {
+      count = element(var.backup_policy_file_share_daily_retention_counts, count.index)
+    }
+  }
+
+}
+
+###
+# Backup protected file share
+###
+
+resource "azurerm_backup_protected_file_share" "this" {
+  count = local.should_create_backup_protected_file_share ? length(var.backup_protected_file_share_source_file_share_names) : 0
+
+  resource_group_name       = var.resource_group_name
+  recovery_vault_name       = element(azurerm_recovery_services_vault.this.*.name, count.index)
+  source_storage_account_id = element(azurerm_backup_container_storage_account.this_container.*.storage_account_id, count.index)
+  source_file_share_name    = element(var.backup_protected_file_share_source_file_share_names, count.index)
+  backup_policy_id          = element(compact(concat(concat(azurerm_backup_policy_file_share.this.*.id, [""]), var.existing_backup_file_share_policy_ids)), count.index)
 }
