@@ -8,16 +8,23 @@ See `examples` folders for usage of this module.
 - By default soft delete option for recovery service key vault will be enabled. When trying to delete the recovery service vault resource make sure to unregister\stop all the VMs and storage files share backups in the recovery service key vault. If not Terraform will throw an exception.
 
 <!-- BEGINNING OF PRE-COMMIT-TERRAFORM DOCS HOOK -->
+## Requirements
+
+| Name | Version |
+|------|---------|
+| terraform | >= 0.12 |
+| azurerm | >= 2.0.0 |
+
 ## Providers
 
 | Name | Version |
 |------|---------|
-| azurerm | >=1.36.0, < 2.0.0 |
+| azurerm | >= 2.0.0 |
 
 ## Inputs
 
 | Name | Description | Type | Default | Required |
-|------|-------------|------|---------|:-----:|
+|------|-------------|------|---------|:--------:|
 | backup\_container\_storage\_account\_ids | The list of Azure resource IDs of the storage account to be registered. | `list(string)` | <pre>[<br>  ""<br>]</pre> | no |
 | backup\_frequencies | If specified , it defines  the frequency of backups. Must be either `Daily` or `Weekly`. | `list(string)` | <pre>[<br>  ""<br>]</pre> | no |
 | backup\_policy\_file\_share\_count | Specifies the numnber of backup file share policies we would like to create. | `number` | `1` | no |
